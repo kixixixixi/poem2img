@@ -119,6 +119,7 @@ const IndexPage: NextPage = () => {
           )}
           {url && (
             <img
+              alt="Generated image"
               src={url}
               style={{
                 display: "block",
