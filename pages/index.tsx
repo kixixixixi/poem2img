@@ -1,7 +1,9 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { FormEvent } from "react"
 import { NextPage } from "next"
 import axios from "axios"
+
+const LOCAL_STORAGE_KEY_API_KEY = "OPENAI_API_KEY" as const
 
 type ImageGenerationResponse = {
   created: number
@@ -15,10 +17,16 @@ const IndexPage: NextPage = () => {
   const [poem, setPoem] = useState<string>()
   const [message, setMessage] = useState<string>()
   const [url, setUrl] = useState<string>()
+  useEffect(() => {
+    const storageApiKey = localStorage.getItem(LOCAL_STORAGE_KEY_API_KEY)
+    if (storageApiKey) setApiKey(storageApiKey)
+  }, [])
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!apiKey) return
     setMessage("Requesting...")
     setUrl(undefined)
+    localStorage.setItem(LOCAL_STORAGE_KEY_API_KEY, apiKey)
     try {
       const {
         data: { data },
